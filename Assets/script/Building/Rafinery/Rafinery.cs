@@ -287,7 +287,7 @@ public class Rafinery : BuildingManager
 
             timer += Time.deltaTime;
             //production bar update
-            if ((inventory.GetItemAmount(inputRessourcesType[0].nom) > 0 || inventory.GetItemAmount(inputRessourcesType[1].nom) > 0) && IsWorking)
+            if ((inventory.GetItemAmount(inputRessourcesType[0].nom) > 0 || inventory.GetItemAmount(inputRessourcesType[1].nom) > 0) && IsWorking && fuelRessourcesTimer > 0)
             {
                 InputProgressBar.maxValue = BuildingSpeed;
                 InputProgressBar.value = timer;
@@ -340,7 +340,7 @@ public class Rafinery : BuildingManager
 
 
 
-
+                InputProgressBar.value = timer;
                 RefreshRafineryUI();
                 timer = 0f;
 
@@ -390,7 +390,6 @@ public class Rafinery : BuildingManager
         WorkingButton.onClick.AddListener(IsNotWorkBuilding);
         WorkingButtonTxt.text = "Turn Off";
         timer = 0f;
-        InputProgressBar.value = timer;
 
     }
 
@@ -402,6 +401,7 @@ public class Rafinery : BuildingManager
         WorkingButton.onClick.AddListener(IsWorkBuilding);
         WorkingButtonTxt.text = "Turn On";
         timer = 0f;
+        InputProgressBar.value = timer;
 
     }
 
