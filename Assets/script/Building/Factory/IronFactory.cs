@@ -2,9 +2,18 @@ using UnityEngine;
 
 public class IronFactory : Factory
 {
-    public void Start()
+    public override void Start()
     {
+
         resourceTag = "IronOre";
-        resourceType = "Iron";
+
+        if (outputRessourcesType == null || outputRessourcesType.Length == 0)
+        {
+            outputRessourcesType = new OutputRessourcesType[1];
+            outputRessourcesType[0] = new OutputRessourcesType { nom = "Iron" };
+        }
+
+        base.Start();
+        
     }
 }

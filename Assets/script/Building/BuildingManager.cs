@@ -31,11 +31,28 @@ public class BuildingManager : MonoBehaviour
     public int BuildingLevel;
     public int BuildingLevelMax;
     public int BuildingSpeed;
+    public class InputRessourcesType
+    {
+        public string nom;
+    }
+    public class FuelRessources
+    {
+        public string nom;
+        public int fuelValue;
+    }
+      public class OutputRessourcesType
+    {
+        public string nom;
+    }
+    public InputRessourcesType[] inputRessourcesType;
+    public OutputRessourcesType[] outputRessourcesType;
+    public FuelRessources[] fuelRessources;
 
     [Header("General Building UI")]
     public GameObject uiInstance;
-
     public Inventory inventory = new Inventory();
+
+    protected Canvas mainCanvas;
 
     private int _nObstacles;
 
@@ -49,6 +66,11 @@ public class BuildingManager : MonoBehaviour
         BuildingSpeed = BuildingSpeed / BuildingLevel;
 
         _InitializeMaterials();
+    }
+
+    public void SetCanvas(Canvas canvas)
+    {
+        mainCanvas = canvas;
     }
 
     public void DestroyUi()
@@ -156,6 +178,7 @@ public class BuildingManager : MonoBehaviour
     {
         Destroy(uiInstance);
         Destroy(gameObject);
+        playerInventory.inventory.AddItem(gameObject.name, 1); // Ajoute de l'argent au joueur lors de la destruction du bâtiment
     }
 
     public void UpgradeBuilding()

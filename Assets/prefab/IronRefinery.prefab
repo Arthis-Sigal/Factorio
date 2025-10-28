@@ -141,8 +141,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 216.48518, y: 2.34, z: 215.24194}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4249257374727186840}
   m_Father: {fileID: 0}
@@ -218,7 +218,8 @@ MonoBehaviour:
   validPlacementMaterial: {fileID: 2100000, guid: b958a15d15b26464fa2cee9517fbf0e2, type: 2}
   invalidPlacementMaterial: {fileID: 2100000, guid: 5a91ef4ee9c893e4cae15ed8a49bf01b, type: 2}
   playerInventory: {fileID: 0}
-  meshComponents: []
+  meshComponents:
+  - {fileID: 7932733936161048787}
   hasValidPlacement: 0
   isFixed: 0
   BuildingStorageMax: 50
@@ -230,6 +231,7 @@ MonoBehaviour:
   resourceTag: 
   resourceType: 
   IsWorking: 0
+  OutputRessourcesType: 
   InventoryUIPrefab: {fileID: 3505154180637104920, guid: dfa0b086a1913a94e99155d3e035d1ec, type: 3}
   ItemSlotPrefabBuilding: {fileID: 6440363844952595685, guid: b5a4ace3f0e79044d9134db775620a97, type: 3}
   WorkingButton: {fileID: 0}
@@ -238,8 +240,8 @@ MonoBehaviour:
   CloseButton: {fileID: 0}
   UpgradeButton: {fileID: 0}
   RafineryInventory: {fileID: 0}
-  OutputRessourcesType: 
-  fuelRessources: 
+  InputProgressBar: {fileID: 0}
+  FuelProgressBar: {fileID: 0}
 --- !u!135 &5546182867522941078
 SphereCollider:
   m_ObjectHideFlags: 0

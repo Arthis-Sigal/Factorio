@@ -19,7 +19,12 @@ public class IronRafinery : Rafinery
             fuelRessources[0] = new FuelRessources { nom = "Charcoal", fuelValue = 5 };
             fuelRessources[1] = new FuelRessources { nom = "Wood", fuelValue = 2 };
         }
-        
-        OutputRessourcesType = "IronIngot";
+
+
+        if (outputRessourcesType == null || outputRessourcesType.Length == 0)
+        {
+            outputRessourcesType = new OutputRessourcesType[1];
+            outputRessourcesType[0] = new OutputRessourcesType { nom = "IronIngot"};
+        }
     }
 }

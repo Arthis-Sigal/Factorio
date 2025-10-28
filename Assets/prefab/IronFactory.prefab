@@ -128,6 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::IronFactory
   validPlacementMaterial: {fileID: 2100000, guid: b958a15d15b26464fa2cee9517fbf0e2, type: 2}
   invalidPlacementMaterial: {fileID: 2100000, guid: 5a91ef4ee9c893e4cae15ed8a49bf01b, type: 2}
+  playerInventory: {fileID: 0}
   meshComponents:
   - {fileID: 1095139521320945960}
   hasValidPlacement: 0
@@ -137,10 +138,19 @@ MonoBehaviour:
   BuildingLevel: 10
   BuildingLevelMax: 3
   BuildingSpeed: 10
+  uiInstance: {fileID: 0}
   resourceTag: IronOre
   resourceType: 
   factoryUIPrefab: {fileID: 2434439330391007442, guid: 98de74bf44ade4242a49753d5abf05c1, type: 3}
-  isOnIron: 0
+  nameText: {fileID: 0}
+  SliderAmountValue: {fileID: 0}
+  FactoryInventory: {fileID: 0}
+  GetAmount: {fileID: 0}
+  GetAmountInt: 0
+  collectButton: {fileID: 0}
+  destroyButton: {fileID: 0}
+  CloseButton: {fileID: 0}
+  mainCanvas: {fileID: 0}
 --- !u!54 &3787281288259163425
 Rigidbody:
   m_ObjectHideFlags: 0
