@@ -12,21 +12,10 @@ public class Rafinery : BuildingManager
     public string resourceTag;
     public string resourceType;
     public bool IsWorking;
-    public class InputRessourcesType
-    {
-        public string nom;
-    }
-    public class FuelRessources
-    {
-        public string nom;
-        public int fuelValue;
-    }
-    public InputRessourcesType[] inputRessourcesType;
-    public string OutputRessourcesType;
-    public FuelRessources[] fuelRessources;
     private float timer;
     private float fuelRessourcesTimer;
     private float curentFuelValue;
+    private string OnProductionItem;
     private bool firstProductionDone = false;
     Dictionary<string, int> RafineryItems;
     Dictionary<string, int> PLayerItems;
@@ -42,6 +31,7 @@ public class Rafinery : BuildingManager
     public TMP_Text RafineryInventory;
     public Slider InputProgressBar;
     public Slider FuelProgressBar;
+  
 
     [System.Obsolete]
     public void OpenRafineryUI()
@@ -57,14 +47,6 @@ public class Rafinery : BuildingManager
         }
 
         if (!IsWorking) timer = 0f;
- 
-        // Trouver le Canvas
-        Canvas mainCanvas = FindObjectOfType<Canvas>();
-        if (mainCanvas == null)
-        {
-            Debug.LogError("Aucun Canvas trouvé !");
-            return;
-        }
 
 
         // Créer le panneau principal
@@ -263,7 +245,12 @@ public class Rafinery : BuildingManager
 
         if (isFixed)
         {
-            if (!firstProductionDone && IsWorking)
+            //crafting process 1
+            foreach (var output in outputRessourcesType)
+            {
+                OnProductionItem = output.nom;
+
+                if (!firstProductionDone && IsWorking)
                 {
                     timer = 0f;
                     foreach (var fuel in fuelRessources)
@@ -278,16 +265,19 @@ public class Rafinery : BuildingManager
                         }
                     }
                     firstProductionDone = true;
-                    InputProgressBar.maxValue = BuildingSpeed;
-                    InputProgressBar.value = timer;
-                    FuelProgressBar.maxValue = curentFuelValue;
-                    FuelProgressBar.value = fuelRessourcesTimer;
+                    if(uiInstance != null)
+                    {
+                        InputProgressBar.maxValue = BuildingSpeed;
+                        InputProgressBar.value = timer;
+                        FuelProgressBar.maxValue = curentFuelValue;
+                        FuelProgressBar.value = fuelRessourcesTimer;
+                    }
                     RefreshRafineryUI();
                 }
 
             timer += Time.deltaTime;
             //production bar update
-            if ((inventory.GetItemAmount(inputRessourcesType[0].nom) > 0 || inventory.GetItemAmount(inputRessourcesType[1].nom) > 0) && IsWorking && fuelRessourcesTimer > 0)
+            if ((inventory.GetItemAmount(inputRessourcesType[0].nom) > 0 || inventory.GetItemAmount(inputRessourcesType[1].nom) > 0) && IsWorking && fuelRessourcesTimer > 0 && uiInstance != null)
             {
                 InputProgressBar.maxValue = BuildingSpeed;
                 InputProgressBar.value = timer;
@@ -299,7 +289,7 @@ public class Rafinery : BuildingManager
             if (IsWorking)
             {              
                 // Si plus de fuel en cours, on en consommer un nouveau
-                if (fuelRessourcesTimer <= 0)
+                if (fuelRessourcesTimer <= 0 && (inventory.GetItemAmount(inputRessourcesType[0].nom) > 0 || inventory.GetItemAmount(inputRessourcesType[1].nom) > 0))
                 {
                     foreach (var fuel in fuelRessources)
                     {
@@ -335,7 +325,7 @@ public class Rafinery : BuildingManager
                     // Consomme l’entrée
                     inventory.RemoveItem(inputUsed, 1);
                     // Produit la sortie
-                    inventory.AddItem(OutputRessourcesType, 1);
+                    inventory.AddItem(OnProductionItem, 1);
                 }
 
 
@@ -348,8 +338,15 @@ public class Rafinery : BuildingManager
             // Diminue la durée du fuel
             if (fuelRessourcesTimer > 0) fuelRessourcesTimer--;
             //fuel bar update
-            FuelProgressBar.maxValue = curentFuelValue;
-            FuelProgressBar.value = fuelRessourcesTimer;
+            if (uiInstance != null)
+            {
+                FuelProgressBar.maxValue = curentFuelValue;
+                FuelProgressBar.value = fuelRessourcesTimer;
+            }
+
+
+            }
+            
         }
     }
 

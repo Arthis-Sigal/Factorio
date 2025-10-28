@@ -6,8 +6,10 @@ using System;
 
 public class PlayerInventoryUI : MonoBehaviour
 {
-    public PlayerInventory playerInventory;
-    public GameObject InventoryUIPrefab;
+    private PlayerInventory playerInventory;
+    [SerializeField] private GameObject inventoryUIPrefab;
+    [SerializeField] private Canvas mainCanvas;
+
     public GameObject ItemSlotPrefab;
 
     public GameObject uiInstance;
@@ -39,19 +41,12 @@ public class PlayerInventoryUI : MonoBehaviour
                 return;
             }
         }
-        // Trouver le Canvas
-        Canvas mainCanvas = FindObjectOfType<Canvas>();
-        if (mainCanvas == null)
-        {
-            Debug.LogError("Aucun Canvas trouvé !");
-            return;
-        }
-
-        Debug.Log(InventoryUIPrefab.name);
+        
+        Debug.Log(inventoryUIPrefab.name);
 
 
         // Créer le panneau principal
-        uiInstance = Instantiate(InventoryUIPrefab, mainCanvas.transform);
+        uiInstance = Instantiate(inventoryUIPrefab, mainCanvas.transform);
         uiInstance.transform.localScale = Vector3.one;
 
         // On récupère le RectTransform du prefab
@@ -89,6 +84,7 @@ public class PlayerInventoryUI : MonoBehaviour
         
         foreach (var item in items)
         {
+            if (item.Value <= 0) continue;
             GameObject slot = Instantiate(ItemSlotPrefab, container);
 
             // Trouver les composants

@@ -20,24 +20,23 @@ public class Factory : BuildingManager
     public Button collectButton;
     public Button destroyButton;
     public Button CloseButton;
-    public Canvas mainCanvas;
 
  
+
+    public virtual void Start()
+    {
+        foreach (var output in outputRessourcesType)
+        {
+            resourceType = output.nom;
+        }
+    }
     [System.Obsolete]
     public void OpenFactoryUI()
     {
   
         playerInventory = FindObjectOfType<PlayerInventory>();
 
-        // Trouve le Canvas dans la scène
-        mainCanvas = FindObjectOfType<Canvas>();
-        if (mainCanvas == null)
-        {
-            Debug.LogError("Aucun Canvas trouvé dans la scène !");
-            return;
-        }
-
-          if (uiInstance != null)
+        if (uiInstance != null)
         {
             Debug.LogError("Instance déjà existance");
             return;

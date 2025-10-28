@@ -10,12 +10,12 @@ public class PlayerInteraction : MonoBehaviour
     public IronFactory Ironfactory;
     public WoodFactory Woodfactory;
     public CharcoalFactory Charcoalfactory;
+    public IronRafinery IronRafinery;
 
     [Header("Rafinery References")]
-    public IronRafinery IronRafinery;
-  
-
     public PlayerInventoryUI playerInventoryUI;
+    [SerializeField] private Canvas mainCanvas;
+
 
     void Start()
     {
@@ -32,16 +32,36 @@ public class PlayerInteraction : MonoBehaviour
             {
                 // Vérifie si l'objet est un bâtiment qui implémente IProductionBuilding
                 IronFactory Ironfactory = hit.collider.GetComponentInParent<IronFactory>();
-                if (Ironfactory != null) Ironfactory.OpenFactoryUI();
+                if (Ironfactory != null)
+                {
+                    Ironfactory.SetCanvas(mainCanvas);
+                    Ironfactory.OpenFactoryUI();
+                }
+          
+                
 
                 WoodFactory Woodfactory = hit.collider.GetComponentInParent<WoodFactory>();
-                if (Woodfactory != null) Woodfactory.OpenFactoryUI();
+                if (Woodfactory != null)
+                {
+                    Woodfactory.SetCanvas(mainCanvas);
+                    Woodfactory.OpenFactoryUI();  
+                }
+ 
+
 
                 CharcoalFactory CharcoalFactory = hit.collider.GetComponentInParent<CharcoalFactory>();
-                if (CharcoalFactory != null) CharcoalFactory.OpenFactoryUI();
+                if (CharcoalFactory != null)
+                {
+                    CharcoalFactory.SetCanvas(mainCanvas);
+                    CharcoalFactory.OpenFactoryUI();   
+                }
 
                 IronRafinery IronRafinery = hit.collider.GetComponentInParent<IronRafinery>();
-                if (IronRafinery != null) IronRafinery.OpenRafineryUI();
+                if (IronRafinery != null)
+                {
+                    IronRafinery.SetCanvas(mainCanvas);
+                    IronRafinery.OpenRafineryUI();
+                }
             }
         }
         
