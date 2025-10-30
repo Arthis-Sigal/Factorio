@@ -25,7 +25,6 @@ public class BuildingGridPlacer : BuildingPlacer
 
     public void Update()
     {
-
         if (Input.GetMouseButtonDown(1))
         {
             Destroy(_toBuild);
@@ -67,9 +66,21 @@ public class BuildingGridPlacer : BuildingPlacer
                             _PrepareBuilding();
                         }
 
+                        if (playerInventory != null)
+                        {
+                            if (playerInventory.inventory.GetItemAmount(_buildingPrefab.name) > 0) //a retirer à la realise (test)
+                            {
+                                Debug.Log("✅ Construction de " + _buildingPrefab.name);
+                                playerInventory.inventory.RemoveItem(_buildingPrefab.name, 1);
+                                UpdateBuildingModeUI();
+                            }
+                        }
+                        
+   
                         _buildingPrefab = null;
                         _toBuild = null;
                         _EnableGridVisual(false);
+                        
                     }
 
                 }

@@ -178,7 +178,9 @@ public class BuildingManager : MonoBehaviour
     {
         Destroy(uiInstance);
         Destroy(gameObject);
-        playerInventory.inventory.AddItem(gameObject.name, 1); // Ajoute de l'argent au joueur lors de la destruction du bâtiment
+        string BuildingName = gameObject.name.Replace("(Clone)", "");
+        playerInventory.inventory.AddItem(BuildingName, 1); // Ajoute de l'argent au joueur lors de la destruction du bâtiment
+        Debug.Log("Bâtiment détruit, 1 " + gameObject.name + " ajouté à l'inventaire du joueur.");
     }
 
     public void UpgradeBuilding()

@@ -1,10 +1,13 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
     public float interactRange = 100f;
     private Camera cam;
+
+    public BuildingPlacer buildingPlacer;
 
     [Header("Factory References")]
     public IronFactory Ironfactory;
@@ -14,6 +17,7 @@ public class PlayerInteraction : MonoBehaviour
 
     [Header("Rafinery References")]
     public PlayerInventoryUI playerInventoryUI;
+    public PlayerInventory playerInventory;
     [SerializeField] private Canvas mainCanvas;
 
 
@@ -25,11 +29,40 @@ public class PlayerInteraction : MonoBehaviour
     [Obsolete]
     void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, interactRange))
             {
+                if (buildingPlacer.isOnEditMode)
+                {
+                    BuildingManager building = hit.collider.GetComponentInParent<BuildingManager>();
+                    Debug.Log($"🧱 Suppression du bâtiment : {building.name}");
+                    if (building != null)
+                    {
+                        playerInventory = FindObjectOfType<PlayerInventory>();
+                        building.name = building.name.Replace("(Clone)", "").Trim();
+                        playerInventory.inventory.AddItem(building.name, 1);
+
+                        if (building.inventory.GetAllItems().Count > 0)
+                        {
+                            foreach (var item in building.inventory.GetAllItems())
+                            {
+                                playerInventory.inventory.AddItem(item.Key, item.Value);
+                            }
+                        }
+
+                        buildingPlacer.UpdateBuildingModeUI();
+                        
+
+
+                        // Détruire le bâtiment
+                        Destroy(building.gameObject);
+                        
+                    }
+                    return;
+                }
                 // Vérifie si l'objet est un bâtiment qui implémente IProductionBuilding
                 IronFactory Ironfactory = hit.collider.GetComponentInParent<IronFactory>();
                 if (Ironfactory != null)
