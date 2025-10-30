@@ -14,6 +14,8 @@ public class PlayerInventoryUI : MonoBehaviour
 
     public GameObject uiInstance;
 
+    public Button buildingModeButton;
+
     public static Action<PlayerInventory> getPlayerInventory;
 
     void OnEnable()
@@ -81,7 +83,7 @@ public class PlayerInventoryUI : MonoBehaviour
 
         // Récupérer les items du joueur
         Dictionary<string, int> items = playerInventory.inventory.GetAllItems();
-        
+
         foreach (var item in items)
         {
             if (item.Value <= 0) continue;
@@ -94,8 +96,11 @@ public class PlayerInventoryUI : MonoBehaviour
             // Appliquer les données
             icon.sprite = GetItemIcon(item.Key);
             countText.text = item.Value.ToString();
-       
+
         }
+
+        buildingModeButton = uiInstance.transform.Find("BuildingModeButton").GetComponent<Button>();
+        buildingModeButton.onClick.AddListener(ToggleBuildingMode);
     }
 
     // Exemple pour récupérer l’icône associée à un nom d’objet
@@ -111,5 +116,12 @@ public class PlayerInventoryUI : MonoBehaviour
     public void CloseInventory()
     {
         Destroy(uiInstance);
+    }
+
+    [Obsolete]
+    private void ToggleBuildingMode()
+    {
+        CloseInventory();
+        BuildingPlacer.instance.ToggleBuildingMode();
     }
 }
