@@ -53,6 +53,7 @@ public class BuildingManager : MonoBehaviour
     public Inventory inventory = new Inventory();
 
     protected Canvas mainCanvas;
+    public Dictionary<string, int> PLayerItems;
 
     private int _nObstacles;
 

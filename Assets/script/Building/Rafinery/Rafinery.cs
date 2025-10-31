@@ -18,19 +18,18 @@ public class Rafinery : BuildingManager
     private string OnProductionItem;
     private bool firstProductionDone = false;
     Dictionary<string, int> RafineryItems;
-    Dictionary<string, int> PLayerItems;
 
     [Header("Rafinery UI Reference")]
     public GameObject InventoryUIPrefab;
     public GameObject ItemSlotPrefabBuilding;
-    public Button WorkingButton;
+    private Button WorkingButton;
     public TMP_Text WorkingButtonTxt;
-    public Button destroyButton;
-    public Button CloseButton;
-    public Button UpgradeButton;
-    public TMP_Text RafineryInventory;
-    public Slider InputProgressBar;
-    public Slider FuelProgressBar;
+    private Button destroyButton;
+    private Button CloseButton;
+    private Button UpgradeButton;
+    private TMP_Text RafineryInventory;
+    private Slider InputProgressBar;
+    private Slider FuelProgressBar;
   
 
     [System.Obsolete]
