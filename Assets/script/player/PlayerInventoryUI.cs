@@ -17,6 +17,9 @@ public class PlayerInventoryUI : MonoBehaviour
     public Button buildingModeButton;
 
     public static Action<PlayerInventory> getPlayerInventory;
+    private TMP_Text CoinValue;
+
+    private PlayerMoney playerMoney;
 
     void OnEnable()
     {
@@ -35,6 +38,9 @@ public class PlayerInventoryUI : MonoBehaviour
     
     public void OpenPlayerInventory()
     {
+        if (playerMoney == null)
+            playerMoney = FindObjectOfType<PlayerMoney>();
+        
         if (playerInventory == null)
         {
             if (playerInventory == null)
@@ -43,8 +49,6 @@ public class PlayerInventoryUI : MonoBehaviour
                 return;
             }
         }
-        
-        Debug.Log(inventoryUIPrefab.name);
 
 
         // Créer le panneau principal
@@ -99,9 +103,13 @@ public class PlayerInventoryUI : MonoBehaviour
 
         }
 
+        CoinValue = uiInstance.transform.Find("coinImage/CoinValue").GetComponent<TMP_Text>();
+        CoinValue.text = playerMoney.GetMoneyAmount().ToString();
+
         buildingModeButton = uiInstance.transform.Find("BuildingModeButton").GetComponent<Button>();
         buildingModeButton.onClick.AddListener(ToggleBuildingMode);
     }
+
 
     // Exemple pour récupérer l’icône associée à un nom d’objet
     private Sprite GetItemIcon(string itemName)

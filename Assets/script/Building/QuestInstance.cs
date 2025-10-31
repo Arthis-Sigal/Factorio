@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System.Collections.Generic;
 
 
 public class QuestInstance : BuildingManager
@@ -133,6 +134,15 @@ public class QuestInstance : BuildingManager
 
     private void CheckQuestCompletion()
     {
+        if (playerMoney == null)
+        {
+            playerMoney = FindObjectOfType<PlayerMoney>();
+            if (playerMoney == null)
+            {
+                Debug.LogError("❌ Aucun PlayerMoney trouvé dans la scène !");
+                return;
+            }
+        }
         //Vérifier si le joueur a les ingrédients nécessaires
         bool hasAllIngredients = true;
         foreach (var ingredient in currentQuestIngredients)
@@ -166,47 +176,69 @@ public class QuestInstance : BuildingManager
 
     private void NextQuest()
     {
-        // Calcul reward et nombre d'ingrédients
-        questRewardAmount = (questRewardAmount * NumberOfQuestsCompleted) / 2;
-        questIngredientList = Mathf.Max(1, questIngredientList * (NumberOfQuestsCompleted / 2));
+        NumberOfQuestsCompleted++;
 
-        // Filtrer les ingrédients disponibles selon le niveau
-        var availableIngredients = questIngredients
-            .Where(i => i.UnlockedAtLevel <= NumberOfQuestsCompleted)
+        // Récompense
+        questRewardAmount = Mathf.Max(50, questRewardAmount + 25 * NumberOfQuestsCompleted);
+
+        // Filtrer les ingrédients débloqués
+        var filtered = questIngredients
+            .Where(q => q.UnlockedAtLevel <= NumberOfQuestsCompleted)
             .ToList();
 
-        if (availableIngredients.Count == 0)
+        if (filtered.Count == 0)
         {
-            Debug.LogWarning("Aucun ingrédient débloqué !");
+            Debug.LogWarning("⚠️ Aucun ingrédient débloqué encore !");
             return;
         }
 
-        // Limiter le nombre à la taille de la liste possible
-        int ingredientCount = Mathf.Min(questIngredientList, availableIngredients.Count);
+        // Nombre max = nb dispo
+        questIngredientList = Mathf.Min(1 + NumberOfQuestsCompleted / 2, filtered.Count);
 
-        // Reset la liste de la prochaine quête
-        currentQuestIngredients = new CurrentQuestIngredients[ingredientCount];
+        Debug.Log($"✅ Quête {NumberOfQuestsCompleted}, items demandés : {questIngredientList}/{filtered.Count} disponibles");
 
-        // Tirer les ingrédients sans doublon
-        for (int i = 0; i < ingredientCount; i++)
+        currentQuestIngredients = new CurrentQuestIngredients[questIngredientList];
+        List<int> usedIndexes = new List<int>();
+
+        for (int i = 0; i < questIngredientList; i++)
         {
-            int index = UnityEngine.Random.Range(0, availableIngredients.Count + 1);
-            var chosen = availableIngredients[index];
+            int safety = 200;  // sécurité anti freeze
+            int rnd;
 
-            int amount = UnityEngine.Random.Range(10 * NumberOfQuestsCompleted / 2, 20 * NumberOfQuestsCompleted);
+            do
+            {
+                rnd = UnityEngine.Random.Range(0, filtered.Count);
+                safety--;
+
+                if (safety <= 0)
+                {
+                    Debug.LogError("❌ Sécurité activée : impossible de trouver un nouvel ingrédient unique !");
+                    break;
+                }
+
+            } while (usedIndexes.Contains(rnd));
+
+            usedIndexes.Add(rnd);
+
+            int quantity = UnityEngine.Random.Range(
+                3 * NumberOfQuestsCompleted,
+                8 * NumberOfQuestsCompleted + 1
+            );
+
             currentQuestIngredients[i] = new CurrentQuestIngredients
             {
-                nom = chosen.nom,
-                numberAsked = amount
+                nom = filtered[rnd].nom,
+                numberAsked = quantity
             };
 
-            // Retirer l’ingrédient tiré → empêche doublon
-            availableIngredients.RemoveAt(index);
+            Debug.Log($"📦 Quête → {quantity} x {filtered[rnd].nom}");
         }
 
-        Debug.Log("Nouvelle quête générée !");
         updateUI();
+        Debug.Log("🎯 Nouvelle quête générée !");
     }
+
+
 
 
         
