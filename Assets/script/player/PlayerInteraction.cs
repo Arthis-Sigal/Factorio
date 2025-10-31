@@ -9,11 +9,12 @@ public class PlayerInteraction : MonoBehaviour
 
     public BuildingPlacer buildingPlacer;
 
-    [Header("Factory References")]
+    [Header("Building References")]
     public IronFactory Ironfactory;
     public WoodFactory Woodfactory;
     public CharcoalFactory Charcoalfactory;
     public IronRafinery IronRafinery;
+    public QuestInstance QuestInstance;
 
     [Header("Rafinery References")]
     public PlayerInventoryUI playerInventoryUI;
@@ -94,6 +95,13 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     IronRafinery.SetCanvas(mainCanvas);
                     IronRafinery.OpenRafineryUI();
+                }
+
+                QuestInstance QuestInstance = hit.collider.GetComponentInParent<QuestInstance>();
+                if (QuestInstance != null)
+                {
+                    QuestInstance.SetCanvas(mainCanvas);
+                    QuestInstance.OpenQuestUI();
                 }
             }
         }

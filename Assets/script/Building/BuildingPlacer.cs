@@ -155,7 +155,6 @@ public class BuildingPlacer : MonoBehaviour
 
             foreach (var building in buildingListContainer)
             {
-                Debug.Log($"Comparaison entre {item.Key} et {building.nom}");
                 if (!item.Key.Contains(building.nom))
                     continue;
 
