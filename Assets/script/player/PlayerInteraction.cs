@@ -10,15 +10,16 @@ public class PlayerInteraction : MonoBehaviour
     public BuildingPlacer buildingPlacer;
 
     [Header("Building References")]
-    public IronFactory Ironfactory;
-    public WoodFactory Woodfactory;
-    public CharcoalFactory Charcoalfactory;
-    public IronRafinery IronRafinery;
-    public QuestInstance QuestInstance;
+    private IronFactory Ironfactory;
+    private WoodFactory Woodfactory;
+    private CharcoalRafinery CharcoalRafinery;
+    private IronRafinery IronRafinery;
+    private QuestInstance QuestInstance;
+    private ShopBuilding ShopBuilding;
 
     [Header("Rafinery References")]
     public PlayerInventoryUI playerInventoryUI;
-    public PlayerInventory playerInventory;
+    private PlayerInventory playerInventory;
     [SerializeField] private Canvas mainCanvas;
 
 
@@ -83,11 +84,11 @@ public class PlayerInteraction : MonoBehaviour
  
 
 
-                CharcoalFactory CharcoalFactory = hit.collider.GetComponentInParent<CharcoalFactory>();
-                if (CharcoalFactory != null)
+                CharcoalRafinery CharcoalRafinery = hit.collider.GetComponentInParent<CharcoalRafinery>();
+                if (CharcoalRafinery != null)
                 {
-                    CharcoalFactory.SetCanvas(mainCanvas);
-                    CharcoalFactory.OpenFactoryUI();   
+                    CharcoalRafinery.SetCanvas(mainCanvas);
+                    CharcoalRafinery.OpenRafineryUI();   
                 }
 
                 IronRafinery IronRafinery = hit.collider.GetComponentInParent<IronRafinery>();
@@ -102,6 +103,13 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     QuestInstance.SetCanvas(mainCanvas);
                     QuestInstance.OpenQuestUI();
+                }
+
+                ShopBuilding ShopBuilding = hit.collider.GetComponentInParent<ShopBuilding>();
+                if (ShopBuilding != null)
+                {
+                    ShopBuilding.SetCanvas(mainCanvas);
+                    ShopBuilding.OpenShopUI();
                 }
             }
         }

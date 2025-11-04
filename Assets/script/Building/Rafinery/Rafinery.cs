@@ -238,9 +238,7 @@ public class Rafinery : BuildingManager
     public void Update()
     {
         if (BuildingLevel >= BuildingLevelMax)
-        {
             UpgradeButton.interactable = false;
-        }
 
         if (isFixed)
         {
@@ -435,13 +433,10 @@ public class Rafinery : BuildingManager
         {
             Amount = inventory.GetItemAmount(resourceType);
         }
-        
         inventory.RemoveItem(resourceType, Amount);
         player.inventory.AddItem(resourceType, Amount);
         BuildingStockedRessources -= Amount;
         RefreshRafineryUI();
         
     }
-
-
 }

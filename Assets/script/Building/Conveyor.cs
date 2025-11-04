@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using Microsoft.Unity.VisualStudio.Editor;
-using UnityEngine.Rendering;
 
 public class Conveyor : BuildingManager
 {

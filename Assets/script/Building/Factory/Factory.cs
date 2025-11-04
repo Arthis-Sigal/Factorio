@@ -12,14 +12,15 @@ public class Factory : BuildingManager
 
     [Header("Factory UI Reference")]
     public GameObject factoryUIPrefab;
-    public TMP_Text nameText;
-    public TMP_Text SliderAmountValue;
-    public TMP_Text FactoryInventory;
-    public Slider GetAmount;
-    public int GetAmountInt;
-    public Button collectButton;
-    public Button destroyButton;
-    public Button CloseButton;
+    private TMP_Text nameText;
+    private TMP_Text SliderAmountValue;
+    private TMP_Text FactoryInventory;
+    private Slider GetAmount;
+    private int GetAmountInt;
+    private Button collectButton;
+    private Button destroyButton;
+    private Button CloseButton;
+    private Button upgradeButton;
 
  
 
@@ -57,6 +58,7 @@ public class Factory : BuildingManager
         FactoryInventory = uiInstance.transform.Find("Panel/Inventory").GetComponent<TMP_Text>();
         destroyButton = uiInstance.transform.Find("Panel/DestroyButton").GetComponent<Button>();
         CloseButton = uiInstance.transform.Find("Panel/CloseButton").GetComponent<Button>();
+        upgradeButton = uiInstance.transform.Find("Panel/UpgradeButton").GetComponent<Button>();
 
         // Configure le UI
         nameText.text = gameObject.name;
@@ -70,6 +72,7 @@ public class Factory : BuildingManager
         collectButton.onClick.AddListener(OnCollectClicked);
         CloseButton.onClick.AddListener(DestroyUi);
         destroyButton.onClick.AddListener(DestroyBuilding);
+        upgradeButton.onClick.AddListener(UpgradeFactoryUI);
     }
 
     private void OnProductionChanged(float value)
@@ -135,7 +138,7 @@ public class Factory : BuildingManager
             Debug.Log($"{name} n’a pas assez de {resourceType} !");
         }
     }
-    
+
     public void Update()
     {
         if (isFixed)
@@ -148,7 +151,7 @@ public class Factory : BuildingManager
                 FactoryInventory.text = $"{BuildingStockedRessources} / {BuildingStorageMax}";
                 GetAmount.maxValue = BuildingStockedRessources;
             }
-            
+
             if (onResource && BuildingStockedRessources < BuildingStorageMax)
             {
                 //Debug.Log(this.name + "Dans une foret");
@@ -172,6 +175,19 @@ public class Factory : BuildingManager
 
 
         }
+    }
+
+    [System.Obsolete]
+    private void UpgradeFactoryUI()
+    {
+        UpgradeBuilding();
+        RefreshUIFactory();
+    }
+
+    private void RefreshUIFactory()
+    {
+        if (BuildingLevel >= BuildingLevelMax)
+            upgradeButton.interactable = false;
     }
 
 }

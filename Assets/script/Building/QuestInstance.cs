@@ -16,8 +16,6 @@ public class QuestInstance : BuildingManager
     private TMP_Text rewardTxt;
     private TMP_Text questDescriptionTxt;
 
-    private PlayerMoney playerMoney;
-
     //Gestion quéte
     private int NumberOfQuestsCompleted = 0;
     private int questRewardAmount = 100;
@@ -38,10 +36,18 @@ public class QuestInstance : BuildingManager
     }
     public CurrentQuestIngredients[] currentQuestIngredients;
 
+    [Obsolete]
     public void Start()
     {
-
-        playerMoney = FindObjectOfType<PlayerMoney>();
+           if (playerInventory == null)
+        {
+            playerInventory = FindObjectOfType<PlayerInventory>();
+            if (playerInventory == null)
+            {
+                Debug.LogError("❌ Aucun PlayerInventory trouvé dans la scène !");
+                return;
+            }
+        }
 
         if (questIngredients == null || questIngredients.Length == 0)
         {
@@ -59,6 +65,8 @@ public class QuestInstance : BuildingManager
 
         }
     }
+
+    [Obsolete]
     public void OpenQuestUI()
     {
         if (playerInventory == null)
@@ -104,11 +112,13 @@ public class QuestInstance : BuildingManager
         generateUI();
     }
 
+    [Obsolete]
     private void updateUI()
     {
         generateUI();
     }
 
+    [Obsolete]
     private void generateUI()
     {
         closeButton = uiInstance.transform.Find("CloseButton").GetComponent<Button>();
@@ -132,6 +142,7 @@ public class QuestInstance : BuildingManager
         }
     }
 
+    [Obsolete]
     private void CheckQuestCompletion()
     {
         if (playerMoney == null)
@@ -174,6 +185,7 @@ public class QuestInstance : BuildingManager
         }
     }
 
+    [Obsolete]
     private void NextQuest()
     {
         NumberOfQuestsCompleted++;

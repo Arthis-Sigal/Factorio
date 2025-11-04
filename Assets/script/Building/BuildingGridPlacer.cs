@@ -102,7 +102,7 @@ public class BuildingGridPlacer : BuildingPlacer
         float s = threshold * 0.5f;
         v.x += s + gridOffset.x; //recenter in momiddle of cells
         v.z += s + gridOffset.z;
-        v.y += s + gridOffset.y;
+        v.y += s + 1.5f;
         return v;
     }
 

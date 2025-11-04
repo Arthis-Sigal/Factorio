@@ -1,10 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
-using TMPro;
-using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 public enum PlacementMode
 {
@@ -30,7 +26,7 @@ public class BuildingManager : MonoBehaviour
     public int BuildingStockedRessources = 0;
     public int BuildingLevel;
     public int BuildingLevelMax;
-    public int BuildingSpeed;
+    public float BuildingSpeed;
     public class InputRessourcesType
     {
         public string nom;
@@ -55,6 +51,8 @@ public class BuildingManager : MonoBehaviour
     protected Canvas mainCanvas;
     public Dictionary<string, int> PLayerItems;
 
+    protected PlayerMoney playerMoney; 
+
     private int _nObstacles;
 
     private void Awake()
@@ -74,7 +72,7 @@ public class BuildingManager : MonoBehaviour
         mainCanvas = canvas;
     }
 
-    public void DestroyUi()
+    protected void DestroyUi()
     {
         Destroy(uiInstance);
     }
@@ -175,7 +173,7 @@ public class BuildingManager : MonoBehaviour
         return ((1 << o.layer) & BuildingPlacer.instance.groundLayerMask.value) != 0;
     }
 
-    public void DestroyBuilding()
+    protected void DestroyBuilding()
     {
         Destroy(uiInstance);
         Destroy(gameObject);
@@ -184,23 +182,19 @@ public class BuildingManager : MonoBehaviour
         Debug.Log("Bâtiment détruit, 1 " + gameObject.name + " ajouté à l'inventaire du joueur.");
     }
 
-    public void UpgradeBuilding()
+    [System.Obsolete]
+    protected void UpgradeBuilding()
     {
-        if (BuildingLevel >= BuildingLevelMax)
-        {
-            return;
-        }
-        //Retirer l'argent
+        playerMoney = FindObjectOfType<PlayerMoney>();
+        int BuildingUpgradePrice = 400 * BuildingLevel;
+
+        if (BuildingLevel >= BuildingLevelMax) return;
+        if (BuildingUpgradePrice > playerMoney.GetMoneyAmount()) return;
+
+
+        playerMoney.RemoveMoney(BuildingUpgradePrice);
         BuildingLevel++;
         BuildingStorageMax = BuildingStorageMax * BuildingLevel;
         BuildingSpeed = BuildingSpeed / BuildingLevel;
     }
-
-
-
-
-
-
-
-
 }
