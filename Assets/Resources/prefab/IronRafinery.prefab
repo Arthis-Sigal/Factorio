@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 5614225156881521355}
   - component: {fileID: 5546182867522941078}
   m_Layer: 0
-  m_Name: IronRefinery
+  m_Name: IronRafinery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,7 +140,7 @@ Transform:
   m_GameObject: {fileID: 1335609313200633575}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 216.48518, y: 2.34, z: 215.24194}
+  m_LocalPosition: {x: 216.48518, y: 0, z: 215.24194}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -226,22 +226,14 @@ MonoBehaviour:
   BuildingStockedRessources: 0
   BuildingLevel: 1
   BuildingLevelMax: 3
-  BuildingSpeed: 10
+  BuildingSpeed: 1
   uiInstance: {fileID: 0}
   resourceTag: 
   resourceType: 
   IsWorking: 0
-  OutputRessourcesType: 
   InventoryUIPrefab: {fileID: 3505154180637104920, guid: dfa0b086a1913a94e99155d3e035d1ec, type: 3}
   ItemSlotPrefabBuilding: {fileID: 6440363844952595685, guid: b5a4ace3f0e79044d9134db775620a97, type: 3}
-  WorkingButton: {fileID: 0}
   WorkingButtonTxt: {fileID: 0}
-  destroyButton: {fileID: 0}
-  CloseButton: {fileID: 0}
-  UpgradeButton: {fileID: 0}
-  RafineryInventory: {fileID: 0}
-  InputProgressBar: {fileID: 0}
-  FuelProgressBar: {fileID: 0}
 --- !u!135 &5546182867522941078
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -257,9 +249,9 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 0.77
   m_Center: {x: 0, y: 0, z: 0}

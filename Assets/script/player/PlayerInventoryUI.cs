@@ -35,7 +35,8 @@ public class PlayerInventoryUI : MonoBehaviour
     {
         playerInventory = NewPlayerInventory;
     }
-    
+
+    [Obsolete]
     public void OpenPlayerInventory()
     {
         if (playerMoney == null)

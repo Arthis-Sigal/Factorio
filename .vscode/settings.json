@@ -66,5 +66,6 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "Factorio.sln"
+    "dotnet.defaultSolution": "Factorio.sln",
+    "C_Cpp.errorSquiggles": "disabled"
 }

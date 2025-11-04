@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 7864614452872294737}
   - component: {fileID: 1644091551194204543}
   - component: {fileID: 6846587880835187823}
-  - component: {fileID: 7488035784672101203}
+  - component: {fileID: 1240122092349408764}
   - component: {fileID: -187991552603009729}
   m_Layer: 0
-  m_Name: WoodFactory
+  m_Name: CharcoalRafinery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +70,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 96e2251b35d11ae44800bf1c220f2734, type: 2}
+  - {fileID: 2100000, guid: ff52b1ab7c967f24abf92fc7c8e71206, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114,7 +114,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7488035784672101203
+--- !u!114 &1240122092349408764
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,9 +123,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5255706388067215737}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 082b6398b717b2946862d50ecc565ecb, type: 3}
+  m_Script: {fileID: 11500000, guid: 58285585071d40b4489cc1f538b1f744, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WoodFactory
+  m_EditorClassIdentifier: Assembly-CSharp::CharcoalRafinery
   validPlacementMaterial: {fileID: 2100000, guid: b958a15d15b26464fa2cee9517fbf0e2, type: 2}
   invalidPlacementMaterial: {fileID: 2100000, guid: 5a91ef4ee9c893e4cae15ed8a49bf01b, type: 2}
   playerInventory: {fileID: 0}
@@ -139,9 +139,12 @@ MonoBehaviour:
   BuildingLevelMax: 3
   BuildingSpeed: 1
   uiInstance: {fileID: 0}
-  resourceTag: WoodOre
+  resourceTag: 
   resourceType: 
-  factoryUIPrefab: {fileID: 2434439330391007442, guid: 98de74bf44ade4242a49753d5abf05c1, type: 3}
+  IsWorking: 0
+  InventoryUIPrefab: {fileID: 3505154180637104920, guid: dfa0b086a1913a94e99155d3e035d1ec, type: 3}
+  ItemSlotPrefabBuilding: {fileID: 6440363844952595685, guid: b5a4ace3f0e79044d9134db775620a97, type: 3}
+  WorkingButtonTxt: {fileID: 0}
 --- !u!54 &-187991552603009729
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -197,7 +200,7 @@ Transform:
   m_GameObject: {fileID: 6383254948897748792}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.807, y: 0, z: -0.28072104}
+  m_LocalPosition: {x: 0.024, y: 0.37, z: -0.019}
   m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 0.6666667}
   m_ConstrainProportionsScale: 0
   m_Children: []
