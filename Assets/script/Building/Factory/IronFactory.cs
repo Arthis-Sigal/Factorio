@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class IronFactory : Factory
 {
     public override void Start()

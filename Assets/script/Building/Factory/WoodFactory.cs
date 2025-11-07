@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class WoodFactory : Factory
 {
     public override void Start()

@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 3952520679458084255}
   - component: {fileID: 1095139521320945960}
   - component: {fileID: 4939013977916101352}
-  - component: {fileID: 2003615891106590722}
+  - component: {fileID: 3588288601501993939}
   - component: {fileID: 3787281288259163425}
   m_Layer: 0
-  m_Name: IronFactory2
+  m_Name: CopperFactory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,7 +114,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2003615891106590722
+--- !u!114 &3588288601501993939
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,12 +123,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3912971220343526828}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f14f4f96d25a634590e28cb4f46ff69, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f3a1d76f3918e94cbae71e1d8aa6c66, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::IronFactory
+  m_EditorClassIdentifier: Assembly-CSharp::CopperFactory
   validPlacementMaterial: {fileID: 2100000, guid: b958a15d15b26464fa2cee9517fbf0e2, type: 2}
   invalidPlacementMaterial: {fileID: 2100000, guid: 5a91ef4ee9c893e4cae15ed8a49bf01b, type: 2}
-  playerInventory: {fileID: 0}
   meshComponents:
   - {fileID: 1095139521320945960}
   hasValidPlacement: 0
@@ -139,7 +138,7 @@ MonoBehaviour:
   BuildingLevelMax: 3
   BuildingSpeed: 1
   uiInstance: {fileID: 0}
-  resourceTag: IronOre
+  resourceTag: 
   resourceType: 
   factoryUIPrefab: {fileID: 2434439330391007442, guid: 98de74bf44ade4242a49753d5abf05c1, type: 3}
 --- !u!54 &3787281288259163425

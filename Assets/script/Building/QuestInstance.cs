@@ -1,6 +1,5 @@
 using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
@@ -15,6 +14,7 @@ public class QuestInstance : BuildingManager
     private Button questButton;
     private TMP_Text rewardTxt;
     private TMP_Text questDescriptionTxt;
+    private Button nextQuestButton;
 
     //Gestion quéte
     private int NumberOfQuestsCompleted = 0;
@@ -51,11 +51,16 @@ public class QuestInstance : BuildingManager
 
         if (questIngredients == null || questIngredients.Length == 0)
         {
-            questIngredients = new QuestIngredients[4];
+            questIngredients = new QuestIngredients[9];
             questIngredients[0] = new QuestIngredients { nom = "Iron", UnlockedAtLevel = 2 };
             questIngredients[1] = new QuestIngredients { nom = "Wood", UnlockedAtLevel = 1 };
-            questIngredients[2] = new QuestIngredients { nom = "Charcoal", UnlockedAtLevel = 5 };
-            questIngredients[3] = new QuestIngredients { nom = "IronIngot", UnlockedAtLevel = 7 };
+            questIngredients[2] = new QuestIngredients { nom = "Charcoal", UnlockedAtLevel = 7 };
+            questIngredients[3] = new QuestIngredients { nom = "IronIngot", UnlockedAtLevel = 9 };
+            questIngredients[4] = new QuestIngredients { nom = "Bolt", UnlockedAtLevel = 15 };
+            questIngredients[5] = new QuestIngredients { nom = "Copper", UnlockedAtLevel = 5 };
+            questIngredients[6] = new QuestIngredients { nom = "CopperIngot", UnlockedAtLevel = 11 };
+            questIngredients[7] = new QuestIngredients { nom = "CopperWire", UnlockedAtLevel = 18 };
+            questIngredients[8] = new QuestIngredients { nom = "Magnet", UnlockedAtLevel = 25 };
         }
 
         if (currentQuestIngredients == null || currentQuestIngredients.Length == 0) //first quest
@@ -64,6 +69,7 @@ public class QuestInstance : BuildingManager
             currentQuestIngredients[0] = new CurrentQuestIngredients { nom = "Wood", numberAsked = questIngredientCount };
 
         }
+
     }
 
     [Obsolete]
@@ -124,13 +130,17 @@ public class QuestInstance : BuildingManager
         closeButton = uiInstance.transform.Find("CloseButton").GetComponent<Button>();
         questButton = uiInstance.transform.Find("QuestButton").GetComponent<Button>();
         rewardTxt = uiInstance.transform.Find("RewardTxt").GetComponent<TMP_Text>();
-        questDescriptionTxt = uiInstance.transform.Find("QuestDescriptionTxt").GetComponent<TMP_Text>();
+        questDescriptionTxt = uiInstance.transform.Find("QuestDescriptionTxt").GetComponent<TMP_Text>(); 
+        nextQuestButton = uiInstance.transform.Find("NextQuestButton").GetComponent<Button>();
 
 
 
         //button listeners
         closeButton.onClick.AddListener(DestroyUi);
         questButton.onClick.AddListener(CheckQuestCompletion);
+        nextQuestButton.onClick.AddListener(NextQuest);
+        if (NumberOfQuestsCompleted >= 1) nextQuestButton.interactable = true;
+        else nextQuestButton.interactable = false;
 
         rewardTxt.text = "Reward: " + questRewardAmount + " Gold";
         //on affcihe tout le tableau dans quest description
@@ -188,8 +198,6 @@ public class QuestInstance : BuildingManager
     [Obsolete]
     private void NextQuest()
     {
-        NumberOfQuestsCompleted++;
-
         // Récompense
         questRewardAmount = Mathf.Max(50, questRewardAmount + 25 * NumberOfQuestsCompleted);
 

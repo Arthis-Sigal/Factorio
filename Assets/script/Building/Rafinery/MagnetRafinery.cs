@@ -1,0 +1,28 @@
+public class MagnetRafinery : Rafinery
+{
+   
+
+    public void Start()
+    {
+        if (inputRessourcesType == null || inputRessourcesType.Length == 0)
+        {
+            inputRessourcesType = new InputRessourcesType[2];
+            inputRessourcesType[0] = new InputRessourcesType { nom = "Bolt", inputQuantity = 2 };
+            inputRessourcesType[1] = new InputRessourcesType { nom = "CopperWire", inputQuantity = 2};
+        }
+
+        if (fuelRessources == null || fuelRessources.Length == 0)
+        {
+            fuelRessources = new FuelRessources[2];
+            fuelRessources[0] = new FuelRessources { nom = "Charcoal", fuelValue = 5 };
+            fuelRessources[1] = new FuelRessources { nom = "Wood", fuelValue = 2 };
+        }
+
+
+        if (outputRessourcesType == null || outputRessourcesType.Length == 0)
+        {
+            outputRessourcesType = new OutputRessourcesType[1];
+            outputRessourcesType[0] = new OutputRessourcesType { nom = "Magnet", outputQuantity = 1};
+        }
+    }
+}

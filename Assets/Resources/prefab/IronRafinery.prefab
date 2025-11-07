@@ -217,7 +217,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::IronRafinery
   validPlacementMaterial: {fileID: 2100000, guid: b958a15d15b26464fa2cee9517fbf0e2, type: 2}
   invalidPlacementMaterial: {fileID: 2100000, guid: 5a91ef4ee9c893e4cae15ed8a49bf01b, type: 2}
-  playerInventory: {fileID: 0}
   meshComponents:
   - {fileID: 7932733936161048787}
   hasValidPlacement: 0

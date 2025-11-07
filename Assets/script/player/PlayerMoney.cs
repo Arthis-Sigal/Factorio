@@ -6,7 +6,7 @@ public class PlayerMoney : MonoBehaviour
 
     private void Start()
     {
-        playerMoney = 999999;
+        playerMoney = 9999999;
     }
     public void AddMoney(int amount)
     {

@@ -1,15 +1,13 @@
-using UnityEngine;
-
-public class CharcoalFactory : Factory
+public class CopperFactory : Factory
 {
     public override void Start()
     {
-        resourceTag = "WoodOre";
+        resourceTag = "CopperOre";
 
         if (outputRessourcesType == null || outputRessourcesType.Length == 0)
         {
             outputRessourcesType = new OutputRessourcesType[1];
-            outputRessourcesType[0] = new OutputRessourcesType { nom = "Charcoal" };
+            outputRessourcesType[0] = new OutputRessourcesType { nom = "Copper" };
         }
         base.Start();
     }

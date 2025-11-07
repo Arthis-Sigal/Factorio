@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,8 +7,14 @@ public class ShopBuilding : BuildingManager
     [Header("Prefab Building Reference")]
     public GameObject IronFactory;
     public GameObject WoodFactory;
+    public GameObject CopperFactory;
     public GameObject IronRafinery;
     public GameObject CharcoalRafinery;
+    public GameObject BoltRafinery;
+    public GameObject CopperRafinery;
+    public GameObject CopperWireRafinery;
+    public GameObject MagnetRafinery;
+    public GameObject StockageBuilding;
     public GameObject Conveyor1;
     public GameObject Conveyor2;
     public GameObject Conveyor3;
@@ -37,17 +42,23 @@ public class ShopBuilding : BuildingManager
 
         if (buildingList == null || buildingList.Length == 0)
         {
-            buildingList = new BuildingList[10];
-            buildingList[0] = new BuildingList { type = IronFactory, price = 100, name = "IronFactory" };
-            buildingList[1] = new BuildingList { type = WoodFactory, price = 50, name = "WoodFactory" };
-            buildingList[2] = new BuildingList { type = IronRafinery, price = 150, name = "IronRafinery" };
-            buildingList[3] = new BuildingList { type = CharcoalRafinery, price = 150, name = "CharcoalRafinery" };
-            buildingList[4] = new BuildingList { type = Conveyor1, price = 50, name = Conveyor1.name };
-            buildingList[5] = new BuildingList { type = Conveyor2, price = 50, name = Conveyor2.name };
-            buildingList[6] = new BuildingList { type = Conveyor3, price = 50, name = Conveyor3.name };
-            buildingList[7] = new BuildingList { type = Conveyor4, price = 50, name = Conveyor4.name };
-            buildingList[8] = new BuildingList { type = Conveyor5, price = 50, name = Conveyor5.name };
-            buildingList[9] = new BuildingList { type = Conveyor6, price = 50, name = Conveyor6.name };
+            buildingList = new BuildingList[16];
+            buildingList[0] = new BuildingList { type = IronFactory, price = 100, name = IronFactory.name };
+            buildingList[1] = new BuildingList { type = WoodFactory, price = 50, name = WoodFactory.name };
+            buildingList[2] = new BuildingList { type = IronRafinery, price = 150, name = IronRafinery.name };
+            buildingList[3] = new BuildingList { type = CharcoalRafinery, price = 150, name = CharcoalRafinery.name };
+            buildingList[4] = new BuildingList { type = Conveyor1, price = 10, name = Conveyor1.name };
+            buildingList[5] = new BuildingList { type = Conveyor2, price = 10, name = Conveyor2.name };
+            buildingList[6] = new BuildingList { type = Conveyor3, price = 10, name = Conveyor3.name };
+            buildingList[7] = new BuildingList { type = Conveyor4, price = 10, name = Conveyor4.name };
+            buildingList[8] = new BuildingList { type = Conveyor5, price = 10, name = Conveyor5.name };
+            buildingList[9] = new BuildingList { type = Conveyor6, price = 10, name = Conveyor6.name };
+            buildingList[10] = new BuildingList { type = BoltRafinery, price = 200, name = BoltRafinery.name };
+            buildingList[11] = new BuildingList { type = CopperFactory, price = 125, name = CopperFactory.name };
+            buildingList[12] = new BuildingList { type = CopperRafinery, price = 150, name = CopperRafinery.name };
+            buildingList[13] = new BuildingList { type = CopperWireRafinery, price = 200, name = CopperWireRafinery.name };
+            buildingList[14] = new BuildingList { type = MagnetRafinery, price = 500, name = MagnetRafinery.name };
+            buildingList[15] = new BuildingList { type = StockageBuilding, price = 300, name = StockageBuilding.name };
         }
 
         playerMoney = FindObjectOfType<PlayerMoney>();
@@ -86,12 +97,12 @@ public class ShopBuilding : BuildingManager
         foreach (var building in buildingList)
         {
             GameObject slot = Instantiate(ItemSlotPrefab, shopContainer);
-            GameObject icon = slot.transform.Find("Button/IronRafinery").GetComponent<GameObject>();
+            Image icon = slot.transform.Find("Button").GetComponent<Image>();
             TMP_Text priceTxt = slot.transform.Find("Button/Price").GetComponent<TMP_Text>();
             Button button = slot.transform.Find("Button").GetComponent<Button>();
-            TMP_Text nameTxt = slot.transform.Find("Button/BuildingName").GetComponent<TMP_Text>();
+            TMP_Text nameTxt = slot.transform.Find("BuildingName").GetComponent<TMP_Text>();
 
-            icon = building.type;
+            icon.sprite = GetItemIcon(building.name);
 
             nameTxt.text = building.name;
             priceTxt.text = building.price.ToString();

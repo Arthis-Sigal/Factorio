@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
-using NUnit.Framework;
 
 public class Rafinery : BuildingManager
 {
@@ -17,7 +14,6 @@ public class Rafinery : BuildingManager
     private float curentFuelValue;
     private string OnProductionItem;
     private bool firstProductionDone = false;
-    Dictionary<string, int> RafineryItems;
 
     [Header("Rafinery UI Reference")]
     public GameObject InventoryUIPrefab;
@@ -26,10 +22,12 @@ public class Rafinery : BuildingManager
     public TMP_Text WorkingButtonTxt;
     private Button destroyButton;
     private Button CloseButton;
-    private Button UpgradeButton;
+    private Button upgradeButton;
     private TMP_Text RafineryInventory;
     private Slider InputProgressBar;
     private Slider FuelProgressBar;
+    private TMP_Text upgradePrice;
+    private TMP_Text recipeText;
   
 
     [System.Obsolete]
@@ -73,82 +71,20 @@ public class Rafinery : BuildingManager
         rect.localScale = Vector3.one;
         rect.localRotation = Quaternion.identity;
 
-        //-----PlayerInventory-----//
-        // Conteneur (avec GridLayoutGroup)
-        Transform PlayerContainer = uiInstance.transform.Find("PlayerItemContainer");
-        if (PlayerContainer == null)
-        {
-            Debug.LogError("PlayerItemContainer non trouvé dans le prefab !");
-            return;
-        }
-
-        // Nettoyer le conteneur (si déjà ouvert)
-        foreach (Transform child in PlayerContainer)
-            Destroy(child.gameObject);
-
-        // Récupérer les items du joueur
-        PLayerItems = playerInventory.inventory.GetAllItems();
-
-        foreach (var item in PLayerItems)
-        {
-            if (item.Value <= 0) continue;
-            GameObject slot = Instantiate(ItemSlotPrefabBuilding, PlayerContainer);
-
-            // Trouver les composants
-            Image icon = slot.transform.Find("Button").GetComponent<Image>();
-            Button button = slot.transform.Find("Button").GetComponent<Button>();
-            TMP_Text countText = slot.transform.Find("Button/CountText").GetComponent<TMP_Text>();
-
-            // Appliquer les données
-            icon.sprite = GetItemIcon(item.Key);
-            countText.text = item.Value.ToString();
-            button.onClick.AddListener(delegate { PlayerToRafinery(playerInventory, item.Key); });
-
-        }
-
-        //-----RafineryInventory-----//
-        // Conteneur (avec GridLayoutGroup)
-        Transform RafineryContainer = uiInstance.transform.Find("RafineryItemContainer");
-        if (RafineryContainer == null)
-        {
-            Debug.LogError("RafineryItemContainer non trouvé dans le prefab !");
-            return;
-        }
-
-        // Nettoyer le conteneur (si déjà ouvert)
-        foreach (Transform child in RafineryContainer)
-            Destroy(child.gameObject);
-
-        // Récupérer les items du joueur
-        RafineryItems = inventory.GetAllItems();
-
-        foreach (var item in RafineryItems)
-        {
-            if (item.Value <= 0) continue;
-            GameObject slot = Instantiate(ItemSlotPrefabBuilding, RafineryContainer);
-
-            // Trouver les composants
-            Image icon = slot.transform.Find("Button").GetComponent<Image>();
-            Button button = slot.transform.Find("Button").GetComponent<Button>();
-            TMP_Text countText = slot.transform.Find("Button/CountText").GetComponent<TMP_Text>();
-
-            // Appliquer les données
-            icon.sprite = GetItemIcon(item.Key);
-            countText.text = item.Value.ToString();
-            button.onClick.AddListener(delegate { RafineryToPlayer(playerInventory, item.Key); });
-
-        }
-
+        GenerateItemSlot();
 
         //recupération de l'ui elements
         WorkingButton = uiInstance.transform.Find("WorkingButton").GetComponent<Button>();
         WorkingButtonTxt = uiInstance.transform.Find("WorkingButton/WorkingButtonTxt").GetComponent<TMP_Text>();
         destroyButton = uiInstance.transform.Find("DestroyButton").GetComponent<Button>();
         CloseButton = uiInstance.transform.Find("CloseButton").GetComponent<Button>();
-        UpgradeButton = uiInstance.transform.Find("UpgradeButton").GetComponent<Button>();
+        upgradeButton = uiInstance.transform.Find("UpgradeButton").GetComponent<Button>();
         RafineryInventory = uiInstance.transform.Find("Inventory").GetComponent<TMP_Text>();
         InputProgressBar = uiInstance.transform.Find("InputProgressBar").GetComponent<Slider>();
         FuelProgressBar = uiInstance.transform.Find("FuelProgressBar").GetComponent<Slider>();
+        upgradePrice = uiInstance.transform.Find("UpgradePrice").GetComponent<TMP_Text>();
+        recipeText = uiInstance.transform.Find("RecipeText").GetComponent<TMP_Text>();
+        DisplayRecipe(recipeText);
 
         // Connecte les événements 
         if (IsWorking)
@@ -166,17 +102,23 @@ public class Rafinery : BuildingManager
         //production bar setup
         InputProgressBar.maxValue = BuildingSpeed;
         InputProgressBar.value = timer;
+        InputProgressBar.interactable = false;
         //fuel bar setup
         FuelProgressBar.maxValue = curentFuelValue;
         FuelProgressBar.value = fuelRessourcesTimer;
+        FuelProgressBar.interactable = false;
+
+        upgradePrice.text = "Upgrade Price : " + BuildingUpgradePrice.ToString();
 
         //button listeners
         CloseButton.onClick.AddListener(DestroyUi);
         destroyButton.onClick.AddListener(DestroyRafinery);
-        UpgradeButton.onClick.AddListener(UpgradeRafinery);
+        upgradeButton.onClick.AddListener(UpgradeRafinery);
+
+        RefreshRafineryUI();
 
     }
-    
+
     [System.Obsolete]
     public void RefreshRafineryUI()
     {
@@ -185,6 +127,20 @@ public class Rafinery : BuildingManager
         // Mise à jour du texte d’inventaire
         RafineryInventory.text = $"{BuildingStockedRessources} / {BuildingStorageMax}";
 
+        GenerateItemSlot();
+
+        upgradePrice.text = "Upgrade Price : " + BuildingUpgradePrice.ToString();
+        if (BuildingLevel >= BuildingLevelMax)
+        {
+            upgradeButton.interactable = false;
+            upgradePrice.text = "";
+        }
+
+    }
+
+    [System.Obsolete]
+    private void GenerateItemSlot()
+    {
         // Rafraîchir le contenu des conteneurs
         Transform playerContainer = uiInstance.transform.Find("PlayerItemContainer");
         Transform rafineryContainer = uiInstance.transform.Find("RafineryItemContainer");
@@ -232,13 +188,60 @@ public class Rafinery : BuildingManager
             countText.text = item.Value.ToString();
             button.onClick.AddListener(delegate { RafineryToPlayer(playerInventory, item.Key); });
         }
+
+    }
+
+    public void DisplayRecipe(TMP_Text recipeText)
+    {
+        if (recipeText == null)
+        {
+            Debug.LogWarning("TMP_Text est null !");
+            return;
+        }
+
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+        sb.AppendLine("Recipe :");
+
+        // Inputs
+        sb.Append("Input : ");
+        for (int i = 0; i < inputRessourcesType.Length; i++)
+        {
+            var input = inputRessourcesType[i];
+            sb.Append($"{input.inputQuantity} {input.nom}");
+            if (i < inputRessourcesType.Length - 1)
+                sb.Append(", "); // séparer par des virgules
+        }
+        sb.AppendLine();
+
+        // Fuels
+        sb.Append("Fuel : ");
+        for (int i = 0; i < fuelRessources.Length; i++)
+        {
+            var fuel = fuelRessources[i];
+            sb.Append(fuel.nom);
+            if (i < fuelRessources.Length - 1)
+                sb.Append(", ");
+        }
+        sb.AppendLine();
+
+        // Outputs
+        sb.Append("Output : ");
+        for (int i = 0; i < outputRessourcesType.Length; i++)
+        {
+            var output = outputRessourcesType[i];
+            sb.Append($"{output.outputQuantity} {output.nom}");
+            if (i < outputRessourcesType.Length - 1)
+                sb.Append(", ");
+        }
+
+        // Assigner le texte au TMP_Text
+        recipeText.text = sb.ToString();
     }
 
     [System.Obsolete]
     public void Update()
     {
-        if (BuildingLevel >= BuildingLevelMax)
-            UpgradeButton.interactable = false;
 
         if (isFixed)
         {
@@ -272,9 +275,23 @@ public class Rafinery : BuildingManager
                     RefreshRafineryUI();
                 }
 
-            timer += Time.deltaTime;
+                timer += Time.deltaTime;
+                //on verifie que les ressources sont disponible
+                int recipeCount = 0;
+                bool hasAllResources = true;
+                foreach (var input in inputRessourcesType)
+                {
+                    if (inventory.GetItemAmount(input.nom) >= input.inputQuantity)
+                        recipeCount++;
+                    else
+                    {
+                        hasAllResources = false;
+                        break;
+                    }
+
+                }
             //production bar update
-            if ((inventory.GetItemAmount(inputRessourcesType[0].nom) > 0 || inventory.GetItemAmount(inputRessourcesType[1].nom) > 0) && IsWorking && fuelRessourcesTimer > 0 && uiInstance != null)
+            if (hasAllResources && IsWorking && fuelRessourcesTimer > 0 && uiInstance != null)
             {
                 InputProgressBar.maxValue = BuildingSpeed;
                 InputProgressBar.value = timer;
@@ -286,7 +303,7 @@ public class Rafinery : BuildingManager
             if (IsWorking)
             {              
                 // Si plus de fuel en cours, on en consommer un nouveau
-                if (fuelRessourcesTimer <= 0 && (inventory.GetItemAmount(inputRessourcesType[0].nom) > 0 || inventory.GetItemAmount(inputRessourcesType[1].nom) > 0))
+                if (fuelRessourcesTimer <= 0 && hasAllResources)
                 {
                     foreach (var fuel in fuelRessources)
                     {
@@ -305,29 +322,29 @@ public class Rafinery : BuildingManager
                 if (fuelRessourcesTimer <= 0) return;
 
 
-                // Vérifie les ressources d'entrée
-                string inputUsed = null;
-                foreach (var input in inputRessourcesType)
-                {
-                    if (inventory.GetItemAmount(input.nom) > 0)
+                //si les ressources sont disponible, on les retire et on crée la sortie
+                if (recipeCount == inputRessourcesType.Length)
                     {
-                        inputUsed = input.nom;
-                        break;
+                        foreach (var input in inputRessourcesType)
+                        {
+                            if (inventory.GetItemAmount(input.nom) >= input.inputQuantity)
+                            {
+                                //Si il reste des ressources d'entrée
+                                if (input.nom != null)
+                                {
+                                    // Consomme l’entrée
+                                    inventory.RemoveItem(input.nom, input.inputQuantity);
+                                }
+                            }
+                        }
+                        inventory.AddItem(OnProductionItem, output.outputQuantity);
                     }
-                }
-
-                //Si il reste des ressources d'entrée
-                if (inputUsed != null)
-                {
-                    // Consomme l’entrée
-                    inventory.RemoveItem(inputUsed, 1);
-                    // Produit la sortie
-                    inventory.AddItem(OnProductionItem, 1);
-                }
+              
+               
 
 
-
-                InputProgressBar.value = timer;
+                if (uiInstance != null)
+                    InputProgressBar.value = timer;
                 RefreshRafineryUI();
                 timer = 0f;
 
@@ -348,16 +365,7 @@ public class Rafinery : BuildingManager
     }
 
     // Exemple pour récupérer l’icône associée à un nom d’objet
-    private Sprite GetItemIcon(string itemName)
-    {
-        // Si tu as une ressource nommée comme l’item dans Resources/Icons/
-        Sprite icon = Resources.Load<Sprite>($"Icons/{itemName}");
-        if (icon == null)
-            icon = Resources.Load<Sprite>("Icons/default_icon");
-        return icon;
-    }
-
-    public void CloseInventory()
+     public void CloseInventory()
     {
         Destroy(uiInstance);
     }
@@ -373,7 +381,7 @@ public class Rafinery : BuildingManager
     {
         if (BuildingStockedRessources > 0) return;
         DestroyBuilding();
-    
+
     }
 
     [System.Obsolete]
@@ -437,6 +445,6 @@ public class Rafinery : BuildingManager
         player.inventory.AddItem(resourceType, Amount);
         BuildingStockedRessources -= Amount;
         RefreshRafineryUI();
-        
+
     }
 }

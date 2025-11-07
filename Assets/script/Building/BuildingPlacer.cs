@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -29,6 +28,7 @@ public class BuildingPlacer : MonoBehaviour
     Dictionary<string, int> PLayerItems;
 
     public bool isOnEditMode;
+    private PlayerInteraction playerInteraction;
 
     //liste des batiments disponibles à la construction
     public class BuildingListContainer
@@ -47,10 +47,11 @@ public class BuildingPlacer : MonoBehaviour
 
         if (buildingListContainer == null || buildingListContainer.Length == 0)
         {
-            buildingListContainer = new BuildingListContainer[3];
+            buildingListContainer = new BuildingListContainer[4];
             buildingListContainer[0] = new BuildingListContainer { nom = "Factory" };
             buildingListContainer[1] = new BuildingListContainer { nom = "Rafinery" };
-            buildingListContainer[2] = new BuildingListContainer { nom = "Conveyor"};
+            buildingListContainer[2] = new BuildingListContainer { nom = "Conveyor" };
+            buildingListContainer[3] = new BuildingListContainer { nom = "Stockage" };
         }
     }
     public void SetBuildingPrefab(GameObject prefab)
@@ -85,6 +86,8 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
 
+        playerInteraction = FindObjectOfType<PlayerInteraction>();
+        playerInteraction.setUiIsOpen(true);
 
         // Créer le panneau principal
         if (uiInstance != null)
@@ -105,14 +108,23 @@ public class BuildingPlacer : MonoBehaviour
         rect.localScale = Vector3.one;
         rect.localRotation = Quaternion.identity;
 
-        
+
 
         loadInventory();
 
         closeButton = uiInstance.transform.Find("CloseButton").GetComponent<Button>();
-        closeButton.onClick.AddListener(delegate { Destroy(uiInstance); isOnEditMode = false; });
+        closeButton.onClick.AddListener(delegate { DestroyUI(); });
 
 
+    }
+
+    [System.Obsolete]
+    private void DestroyUI()
+    {
+        Destroy(uiInstance);
+        isOnEditMode = false;
+        playerInteraction = FindObjectOfType<PlayerInteraction>();
+        playerInteraction.setUiIsOpen(false);
     }
 
 

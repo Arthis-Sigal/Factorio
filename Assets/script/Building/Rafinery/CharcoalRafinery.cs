@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class CharcoalRafinery : Rafinery
 {
    
@@ -9,7 +7,7 @@ public class CharcoalRafinery : Rafinery
         if (inputRessourcesType == null || inputRessourcesType.Length == 0)
         {
             inputRessourcesType = new InputRessourcesType[1];
-            inputRessourcesType[0] = new InputRessourcesType { nom = "Wood"};
+            inputRessourcesType[0] = new InputRessourcesType { nom = "Wood", inputQuantity = 1};
         }
 
         if (fuelRessources == null || fuelRessources.Length == 0)
@@ -23,7 +21,7 @@ public class CharcoalRafinery : Rafinery
         if (outputRessourcesType == null || outputRessourcesType.Length == 0)
         {
             outputRessourcesType = new OutputRessourcesType[1];
-            outputRessourcesType[0] = new OutputRessourcesType { nom = "Charcoal"};
+            outputRessourcesType[0] = new OutputRessourcesType { nom = "Charcoal", outputQuantity = 1};
         }
     }
 }

@@ -21,6 +21,7 @@ public class Factory : BuildingManager
     private Button destroyButton;
     private Button CloseButton;
     private Button upgradeButton;
+    private TMP_Text upgradePrice;
 
  
 
@@ -59,6 +60,8 @@ public class Factory : BuildingManager
         destroyButton = uiInstance.transform.Find("Panel/DestroyButton").GetComponent<Button>();
         CloseButton = uiInstance.transform.Find("Panel/CloseButton").GetComponent<Button>();
         upgradeButton = uiInstance.transform.Find("Panel/UpgradeButton").GetComponent<Button>();
+        upgradePrice = uiInstance.transform.Find("Panel/UpgradePrice").GetComponent<TMP_Text>();
+        
 
         // Configure le UI
         nameText.text = gameObject.name;
@@ -66,6 +69,7 @@ public class Factory : BuildingManager
         GetAmount.value = 0;
         FactoryInventory.text = $"{BuildingStockedRessources} / {BuildingStorageMax}";
         SliderAmountValue.text = $"{GetAmountInt}";
+        upgradePrice.text = "Upgrade Price : " + BuildingUpgradePrice.ToString();
 
         // Connecte les événements
         GetAmount.onValueChanged.AddListener(OnProductionChanged);
@@ -73,6 +77,8 @@ public class Factory : BuildingManager
         CloseButton.onClick.AddListener(DestroyUi);
         destroyButton.onClick.AddListener(DestroyBuilding);
         upgradeButton.onClick.AddListener(UpgradeFactoryUI);
+
+        RefreshUIFactory();
     }
 
     private void OnProductionChanged(float value)
@@ -186,8 +192,13 @@ public class Factory : BuildingManager
 
     private void RefreshUIFactory()
     {
+        upgradePrice.text = "Upgrade Price : " + BuildingUpgradePrice.ToString();
         if (BuildingLevel >= BuildingLevelMax)
+        {
             upgradeButton.interactable = false;
+            upgradePrice.text = "";
+        }
+       
     }
 
 }

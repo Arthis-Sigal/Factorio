@@ -1,6 +1,6 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -8,29 +8,37 @@ public class PlayerInteraction : MonoBehaviour
     private Camera cam;
 
     public BuildingPlacer buildingPlacer;
-
-    [Header("Building References")]
-    private IronFactory Ironfactory;
-    private WoodFactory Woodfactory;
-    private CharcoalRafinery CharcoalRafinery;
-    private IronRafinery IronRafinery;
-    private QuestInstance QuestInstance;
-    private ShopBuilding ShopBuilding;
+ 
 
     [Header("Rafinery References")]
     public PlayerInventoryUI playerInventoryUI;
     private PlayerInventory playerInventory;
     [SerializeField] private Canvas mainCanvas;
 
+    [Header("PlayerUIReference")]
+    public GameObject pauseMenu;
+
+    [Header("UIRestriction")]
+    private bool uiIsOpen;
+    private bool gameIsPaused;
+
 
     void Start()
     {
         cam = Camera.main;
+        gameIsPaused = false;
+        Time.timeScale = 1f;
     }
 
     [Obsolete]
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (gameIsPaused) ResumeGame();
+            else PauseGame();
+            
+        }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -40,8 +48,8 @@ public class PlayerInteraction : MonoBehaviour
                 if (buildingPlacer.isOnEditMode)
                 {
                     BuildingManager building = hit.collider.GetComponentInParent<BuildingManager>();
-                    Debug.Log($"🧱 Suppression du bâtiment : {building.name}");
-                    if (building != null)
+                    //Debug.Log($"🧱 Suppression du bâtiment : {building.name}");
+                    if (building != null && building.tag != "Indestructible")
                     {
                         playerInventory = FindObjectOfType<PlayerInventory>();
                         building.name = building.name.Replace("(Clone)", "").Trim();
@@ -56,46 +64,92 @@ public class PlayerInteraction : MonoBehaviour
                         }
 
                         buildingPlacer.UpdateBuildingModeUI();
-                        
 
 
-                        // Détruire le bâtiment
+
+                        // Destroy Building
                         Destroy(building.gameObject);
-                        
+
                     }
                     return;
                 }
-                // Vérifie si l'objet est un bâtiment qui implémente IProductionBuilding
+
+                if (uiIsOpen == true) return; //If an UI is open, don't
+
+                // check is the object is a building
                 IronFactory Ironfactory = hit.collider.GetComponentInParent<IronFactory>();
                 if (Ironfactory != null)
                 {
                     Ironfactory.SetCanvas(mainCanvas);
                     Ironfactory.OpenFactoryUI();
+                    setUiIsOpen(true);
                 }
-          
-                
+
+
 
                 WoodFactory Woodfactory = hit.collider.GetComponentInParent<WoodFactory>();
                 if (Woodfactory != null)
                 {
                     Woodfactory.SetCanvas(mainCanvas);
-                    Woodfactory.OpenFactoryUI();  
+                    Woodfactory.OpenFactoryUI();
+                    setUiIsOpen(true);
                 }
- 
 
+                CopperFactory CopperFactory = hit.collider.GetComponentInParent<CopperFactory>();
+                if (CopperFactory != null)
+                {
+                    CopperFactory.SetCanvas(mainCanvas);
+                    CopperFactory.OpenFactoryUI();
+                    setUiIsOpen(true);
+                }
 
                 CharcoalRafinery CharcoalRafinery = hit.collider.GetComponentInParent<CharcoalRafinery>();
                 if (CharcoalRafinery != null)
                 {
                     CharcoalRafinery.SetCanvas(mainCanvas);
-                    CharcoalRafinery.OpenRafineryUI();   
+                    CharcoalRafinery.OpenRafineryUI();
+                    setUiIsOpen(true);
                 }
-
+                
                 IronRafinery IronRafinery = hit.collider.GetComponentInParent<IronRafinery>();
                 if (IronRafinery != null)
                 {
                     IronRafinery.SetCanvas(mainCanvas);
                     IronRafinery.OpenRafineryUI();
+                    setUiIsOpen(true);
+                } 
+                
+                MagnetRafinery MagnetRafinery = hit.collider.GetComponentInParent<MagnetRafinery>();
+                if (MagnetRafinery != null)
+                {
+                    Debug.Log("Heho");
+                    MagnetRafinery.SetCanvas(mainCanvas);
+                    MagnetRafinery.OpenRafineryUI();
+                    setUiIsOpen(true);
+                }
+
+                BoltRafinery BoltRafinery = hit.collider.GetComponentInParent<BoltRafinery>();
+                if (BoltRafinery != null)
+                {
+                    BoltRafinery.SetCanvas(mainCanvas);
+                    BoltRafinery.OpenRafineryUI();
+                    setUiIsOpen(true);
+                }
+
+                CopperRafinery CopperRafinery = hit.collider.GetComponentInParent<CopperRafinery>();
+                if (CopperRafinery != null)
+                {
+                    CopperRafinery.SetCanvas(mainCanvas);
+                    CopperRafinery.OpenRafineryUI();
+                    setUiIsOpen(true);
+                }
+
+                CopperWireRafinery CopperWireRafinery = hit.collider.GetComponentInParent<CopperWireRafinery>();
+                if (CopperWireRafinery != null)
+                {
+                    CopperWireRafinery.SetCanvas(mainCanvas);
+                    CopperWireRafinery.OpenRafineryUI();
+                    setUiIsOpen(true);
                 }
 
                 QuestInstance QuestInstance = hit.collider.GetComponentInParent<QuestInstance>();
@@ -103,6 +157,7 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     QuestInstance.SetCanvas(mainCanvas);
                     QuestInstance.OpenQuestUI();
+                    setUiIsOpen(true);
                 }
 
                 ShopBuilding ShopBuilding = hit.collider.GetComponentInParent<ShopBuilding>();
@@ -110,33 +165,67 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     ShopBuilding.SetCanvas(mainCanvas);
                     ShopBuilding.OpenShopUI();
+                    setUiIsOpen(true);
+                }
+                Stockage Stockage = hit.collider.GetComponentInParent<Stockage>();
+                if (Stockage != null)
+                {
+                    Stockage.SetCanvas(mainCanvas);
+                    Stockage.OpenStockageUI();
+                    setUiIsOpen(true);
                 }
             }
-        }
-        
+        } 
+
         if (Input.GetKeyDown(KeyCode.I))
         {
-            // On récupère (ou crée) la référence s’il n’y en a pas déjà une
+            // Check is inventory is'nt open
             if (playerInventoryUI == null)
             {
                 playerInventoryUI = FindObjectOfType<PlayerInventoryUI>();
                 if (playerInventoryUI == null)
                 {
-                    Debug.LogError("Aucun PlayerInventoryUI trouvé dans la scène !");
+                    Debug.LogError("No PlayerInventoryUI found");
                     return;
                 }
             }
 
-            // Si un inventaire est déjà ouvert, on le ferme
-            if (playerInventoryUI.uiInstance != null)
+            // If inventory open, close it
+            if (playerInventoryUI.uiInstance != null) 
             {
                 playerInventoryUI.CloseInventory();
+                setUiIsOpen(false);
             }
-            else // Sinon on l’ouvre
+            else // else open it
             {
                 playerInventoryUI.OpenPlayerInventory();
+                setUiIsOpen(true);
             }
         }
+    }
+    private void PauseGame()
+    {
+        Time.timeScale = 0;
+        pauseMenu.SetActive(true);
+        gameIsPaused = true;
+    }
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        pauseMenu.SetActive(false);
+        gameIsPaused = false;
+    }
+    public void QuitGame()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(0);
+        gameIsPaused = false;
+    }
 
+    public void setUiIsOpen(bool a)
+    {
+        uiIsOpen = a;
     }
 }
+
+

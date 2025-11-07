@@ -7,6 +7,9 @@ TagManager:
   - IronOre
   - WoodOre
   - SliderFactoryUI
+  - CopperOre
+  - Indestructible
+  - HelpCanvas
   layers:
   - Default
   - TransparentFX

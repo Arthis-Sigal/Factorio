@@ -158,7 +158,8 @@ public class Conveyor : BuildingManager
 
             // ✅ Autorise convoyeurs et bâtiments fixes
             if (building.isFixed)
-            {   
+            {
+                Debug.Log("hello");
                 if (BuildingStockedRessources <= 0) break;
                 timer += Time.deltaTime;
                 if (timer < BuildingSpeed) break;
@@ -167,11 +168,13 @@ public class Conveyor : BuildingManager
                 // Ici, vous pouvez ajouter la logique pour transférer des objets
                 foreach (var item in inventory.GetAllItems())
                 {
+                    Debug.Log("hello2");
                     if (building.BuildingStockedRessources >= building.BuildingStorageMax)
                         break;
 
                     if (item.Value > 0)
                     {
+                        Debug.Log("hello3");
                         inventory.RemoveItem(item.Key, 1);
                         BuildingStockedRessources--;
                         building.inventory.AddItem(item.Key, 1);
