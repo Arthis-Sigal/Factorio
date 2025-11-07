@@ -11,15 +11,7 @@ public class PlayerInventory : MonoBehaviour
     {
         PlayerInventoryUI.getPlayerInventory?.Invoke(this);
 
-        inventory.AddItem("Iron", 1000);
-        inventory.AddItem("Wood", 1000);
-        inventory.AddItem("Charcoal", 1000);
-        inventory.AddItem("IronIngot", 1000);
-        inventory.AddItem("Bolt", 1000);
-        inventory.AddItem("Copper", 1000);
-        inventory.AddItem("CopperIngot", 1000);
-        inventory.AddItem("CopperWire", 1000);
-        inventory.AddItem("Magnet", 1000);
+        inventory.AddItem("WoodFactory", 1);
     }
     
     public void PickupIron(int amount)
