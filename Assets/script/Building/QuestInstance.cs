@@ -215,7 +215,6 @@ public class QuestInstance : BuildingManager
         // Nombre max = nb dispo
         questIngredientList = Mathf.Min(1 + NumberOfQuestsCompleted / 2, filtered.Count);
 
-        Debug.Log($"✅ Quête {NumberOfQuestsCompleted}, items demandés : {questIngredientList}/{filtered.Count} disponibles");
 
         currentQuestIngredients = new CurrentQuestIngredients[questIngredientList];
         List<int> usedIndexes = new List<int>();
@@ -232,7 +231,6 @@ public class QuestInstance : BuildingManager
 
                 if (safety <= 0)
                 {
-                    Debug.LogError("❌ Sécurité activée : impossible de trouver un nouvel ingrédient unique !");
                     break;
                 }
 
